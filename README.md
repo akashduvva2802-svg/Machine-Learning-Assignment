@@ -1,8 +1,17 @@
 ## CFD Mixing Tank – Suspension Quality Prediction
 
-1. **Dataset:** Kaggle "Computational Fluid Dynamics: Mixing Tank" – 1,014 CFD simulations of solid-liquid stirred vessels (impeller design, speed, densities, viscosity, solid fraction).
-2. **Prediction target:** Y = RSD/100, a mixing-quality measure (lower = better suspension). Models were trained on Design 1 (534 samples).
-3. **Models:** Linear Regression (baseline) and Support Vector Regression with an RBF kernel.
-4. **Results:** Linear Regression test R² = 0.07 (RMSE 0.163); SVR test R² = 0.72 (RMSE 0.089). As a well-mixed/poorly-mixed classifier (RSD ≤ 20%), SVR reached 91% 5. accuracy versus 59% for Linear Regression. 5-fold CV confirmed the same picture (SVR R² ≈ 0.72).
-6. **What I learned:** The physics is strongly non-linear, so a linear model underfits badly while an RBF kernel captures it. A model trained on one tank design does not transfer reliably to other designs.
+### Dataset Overview: CFD Mixing Tank Suspension Quality
+* **Source:** [Kaggle: Computational Fluid Dynamics : Mixing Tank](https://www.kaggle.com/datasets/comacque/computational-fluid-dynamics-mixing-tank) (based on ANSYS FLUENT RANS Euler-Granular CFD simulations, referenced on [ResearchGate](https://www.researchgate.net/publication/327059961_Solid-Liquid_Mixing_in_Stirred_Vessels_Numerical_Simulation_Experimental_Validation_and_Suspension_Quality_Prediction_Using_Multivariate_Regression_and_Machine_Learning)).
+* **Objective:** Predict mixing quality (`Y`, a dimensionless number where lower values represent higher suspension quality) in a solid-liquid stirred vessel.
+* **Features:** 78 normalized input variables (0 to 1), comprising 8 raw physical parameters (`X1`–`X8`: impeller design, stirring speed, tank diameter, particle size, fluid/solid densities, viscosity, and solid fraction) and 70 engineered features (`X9`–`X78`: dimensionless numbers and literature correlations).
+* **Task Type:** Tabular Multivariate Regression evaluated on continuous numeric targets across 1,014 simulation instances.
+
+
+1. **Dataset:** [Kaggle: Computational Fluid Dynamics : Mixing Tank](https://www.kaggle.com/datasets/comacque/computational-fluid-dynamics-mixing-tank) (based on ANSYS FLUENT RANS Euler-Granular CFD simulations – with 1,014 CFD simulations of two-phase solid-liquid mixing tank (mechanically stirred vessel).
+   This Dataset studies the impact of various physical parameters like tank and agitator design, stirring speed, tank diameter, solid particle diameter, solid density, liquid density, liquid dynamic viscosity and mean solid volume fraction on the relative standard deviation (Y). This Dataset on kaggle contains 78 rows of input parameters, out of which X1 to X8 are raw inputs and X9 to X78 are additional features constructed. Out of this, dataset with selected columns (X1 to X8 raw inputs and Y; was analysed in this assignment).
+   Actual analysis of the dataset can be referenced on [ResearchGate](https://www.researchgate.net/publication/327059961_Solid-Liquid_Mixing_in_Stirred_Vessels_Numerical_Simulation_Experimental_Validation_and_Suspension_Quality_Prediction_Using_Multivariate_Regression_and_Machine_Learning)
+3. **Prediction target:** Y = RSD/100, a mixing-quality measure (lower = better suspension). Models were trained on Design 1 (534 samples).
+4. **Models:** Linear Regression (baseline) and Support Vector Regression with an RBF kernel. These are the two models which the [reference](https://www.researchgate.net/publication/327059961_Solid-Liquid_Mixing_in_Stirred_Vessels_Numerical_Simulation_Experimental_Validation_and_Suspension_Quality_Prediction_Using_Multivariate_Regression_and_Machine_Learning) had already used. 
+5. **Results:** Linear Regression test R² = 0.07 (RMSE 0.163); SVR test R² = 0.72 (RMSE 0.089). As a well-mixed/poorly-mixed classifier (RSD ≤ 20%), SVR reached 91% 5. accuracy versus 59% for Linear Regression. 5-fold CV confirmed the same picture (SVR R² ≈ 0.72).
+6. **What I learned:** The physics is strongly non-linear, so a linear model underfits badly while an RBF kernel captures it. A model trained on one tank design does not transfer reliably to other designs. The parameters of SVR can affect on how it learns the data. To truly capture the physics, it is important to train the machine learning models using the additional features constructed with physical meaning (such as dimensionless numbers and correlations. This are usually achieved by employing neural networks.
 
